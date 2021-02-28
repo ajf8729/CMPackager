@@ -43,10 +43,10 @@ function New-CMPApplication {
     )
     
     if ($IsFreeApp) {
-        $UserCollectionProd   = "All Users"
+        $UserCollectionProd = "All Users"
     }
     else {
-        $UserCollectionProd   = "$($Name) - Available"
+        $UserCollectionProd = "$($Name) - Available"
     }
     $DeviceCollectionProd = "$($Name) - Required"
     
@@ -86,11 +86,16 @@ function New-CMPApplication {
         break
     }
     
-    $CollectionExists = Test-CMPCollectionsExist -UserCollectionProd $UserCollectionProd -DeviceCollectionProd $DeviceCollectionProd
+    $UserCollection = Get-CMCollection -CollectionType User -Name $UserCollectionProd
+    $DeviceCollection = Get-CMCollection -CollectionType Device -Name $DeviceCollectionProd
     
-    if (-not $CollectionExists) {
-        Set-Location -Path $env:SystemDrive
-        break
+    if ( ($null -eq $UserCollection) -or ($null -eq $DeviceCollection) ) {
+        if ($IsFreeApp) {
+            New-CMPAppCollections -AppName $Name -IsFreeApp
+        }
+        else {
+            New-CMPAppCollections -AppName $Name
+        }
     }
     
     New-CMApplication -Name $AppName -LocalizedName $Name -SoftwareVersion $Version -IconLocationFile $IconPath -ReleaseDate (Get-Date -Format yyyy-MM-dd) | Out-Null
