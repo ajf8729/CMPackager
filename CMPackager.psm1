@@ -16,8 +16,8 @@ else {
 }
 
 #Dot-Source Internal Functions
-$Public  = @(Get-ChildItem -Path "$PSScriptRoot\Public\*.ps1")
-$Private = @(Get-ChildItem -Path "$PSScriptRoot\Private\*.ps1")
+$Public  = @(Get-ChildItem -Path "$PSScriptRoot\Public\*.ps1" -ErrorAction Ignore)
+$Private = @(Get-ChildItem -Path "$PSScriptRoot\Private\*.ps1" -ErrorAction Ignore)
 
 foreach ($File in @($Public + $Private)) {
     try {
