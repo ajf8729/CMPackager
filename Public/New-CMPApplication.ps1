@@ -51,7 +51,15 @@ function New-CMPApplication {
     $DeviceCollectionProd = "$($Name) - Required"
     
     $AppPath = "$ContentRootPath\$Name"
-    $IconPath = Get-CMPIconPath -AppPath $AppPath
+    
+    if (Test-Path -Path "$AppPath\icon.png") {
+        $IconPath = "$AppPath\icon.png"
+    }
+    else {
+        Write-Error -Message "Icon path not found"
+        break
+    }
+    
     $Version = Get-CMPAppVersion -AppPath $AppPath
     $AppName = "$Name $Version"
     $ContentLocation = "$AppPath\$Version\$Architecture"
